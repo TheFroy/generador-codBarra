@@ -2,29 +2,28 @@
 const mySelect = document.getElementById('mySelect')
 const numContainer = document.getElementById('numContainer')
 const btn = document.getElementById('generar')
-const myCanvas = document.getElementById('myCanvas')
-const myImage = document.getElementById('myImage')
 const saveBtn = document.getElementById('save')
 const num = document.getElementById('num')
+
+const generarFormatos = (formato, min, max) => {
+    JsBarcode('#myImg',String(Math.floor(Math.random() * (max - min))+min), {format: formato})
+    JsBarcode('#myCanvas',String(Math.floor(Math.random() * (max - min))+min), {format: formato})
+    
+}
 
 const generar = (formato) => {
     if(formato == "1"){
         JsBarcode("#myCanvas", num.value);
+        JsBarcode("#myImg", num.value);
     }
     else if (formato == "ean13"){
-        var min = 100000000000
-        var max = 1000000000000
-        JsBarcode('#myCanvas',String(Math.floor(Math.random() * (max - min))+min), {format: formato})
+        generarFormatos(formato,100000000000, 1000000000000)
     }
     else if (formato == "upc"){
-        var min = 10000000000
-        var max = 100000000000
-        JsBarcode('#myCanvas',String(Math.floor(Math.random() * (max - min))+min), {format: formato})
+        generarFormatos(formato,10000000000, 100000000000)
     }
     else if (formato == "itf14"){
-        var min = 1000000000000
-        var max = 10000000000000
-        JsBarcode('#myCanvas',String(Math.floor(Math.random() * (max - min))+min), {format: formato})
+        generarFormatos(formato,1000000000000, 10000000000000)
     }
     else{
         alert("Seleccionar un formato")
@@ -42,11 +41,10 @@ mySelect.addEventListener('change',(e) => {
 
 btn.addEventListener('click', () => {
     generar(mySelect.value)
+    
 })
 
-
 saveBtn.addEventListener('click',() => {
-
     if(window.navigator.msSaveBlob){
         window.navigator.msSaveBlob(myCanvas.msToBlob(),"canvas-image.png");
     }
@@ -56,6 +54,5 @@ saveBtn.addEventListener('click',() => {
         a.href=myCanvas.toDataURL("image/jpeg",1);
         a.download = "Barcode.jpg"
         a.click()
-        document.body.appendChild(a)
     }
 })
